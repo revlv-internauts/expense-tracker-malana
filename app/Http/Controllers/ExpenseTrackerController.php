@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ExpenseTracker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class ExpenseTrackerController extends Controller
@@ -23,17 +24,30 @@ class ExpenseTrackerController extends Controller
 
     public function store(Request $request)
     {
+        // dd(Auth::check() ::user(), Auth::id());
+
         $validated = $request->validate([
             'account' => 'bail|string|required',
             'category' => 'bail|string|required',
-            'amount' => 'bail|numeric|required',
+            'amount' => 'bail|string|required',
             'notes'=> 'bail|string|required',
-            'order_at'  => 'date|required|after:today'
+            'order_at'  => 'date|required'
         ]);
+
+
+        $validated['amount'] = str_replace(',', '', $validated['amount']);
+        
+        $validated['user_id'] = Auth::id();
+        // dd($striped_amount);
+        //convert to float
+        $validated['amount'] = (float) $validated['amount'];
+
 
         ExpenseTracker::create($validated);
 
+
         return to_route('expensetracker.index');
+        
     }
 
     

@@ -1,12 +1,10 @@
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
-import { dashboard } from '@/routes';
 import expensetracker from '@/routes/expensetracker';
-import inventories from '@/routes/inventories';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
 import { NumericFormat } from 'react-number-format'
+import AddExpense from './forms/addExpense';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -37,8 +35,6 @@ function FormatDate(dateString: string){
         month: 'long', day: 'numeric', year: 'numeric', hour:'numeric', minute: 'numeric', second: 'numeric', hourCycle: 'h24'
     })
 }
-
-
 
 export default function ExpenseTrackerPage({expenses}: Props) {
 
@@ -73,7 +69,7 @@ export default function ExpenseTrackerPage({expenses}: Props) {
             onClick={() => setIsAddOpen(true)}
             className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-            Add User
+            Add Exepense
         </button>
         {/* <div> total: {totalAmount} </div> */}
 
@@ -88,7 +84,7 @@ export default function ExpenseTrackerPage({expenses}: Props) {
                     x 
                   </button>
                   {/* passing of props */}
-                  {/* <InputForm setIsAddOpen={setIsAddOpen}/> */}
+                  <AddExpense setIsAddOpen={setIsAddOpen}/>
                 </div>
               </div>
             )} 
@@ -132,7 +128,7 @@ export default function ExpenseTrackerPage({expenses}: Props) {
                                 Edit
                             </button>
 
-                      <Link href={`/food/${expense}`} method='delete' className="text-red-600 hover:text-red-900">
+                      <Link href={`/expensetracker/${expense}`} method='delete' className="text-red-600 hover:text-red-900">
                         Delete <span className="sr-only">, {expense.id}</span>
                       </Link>
                     </td>
