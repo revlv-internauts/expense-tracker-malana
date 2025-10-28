@@ -1,4 +1,6 @@
-import { Form, router } from "@inertiajs/react";
+import expensetracker from "@/routes/expensetracker";
+import { Form, router, useForm } from "@inertiajs/react";
+import { log } from "console";
 import React, { use, useState } from "react";
 import { NumericFormat } from "react-number-format";
 
@@ -8,24 +10,44 @@ interface AddExpenseProps {
 
 const AddExpense: React.FC<AddExpenseProps> = ({ setIsAddOpen }) => {
 
-    const acctOptions = ['cash', 'credit card', 'loan']
+    const { data, setData, post, processing, errors } = useForm({
+        account: "cash",
+        category: "food",
+        amount: "",
+        notes: "",
+        order_at: ""
+    });
+
+    const acctOptions = ['cash', 'credit_card', 'loan']
     const categories = ['food', 'utilities', 'transportation']
+
+    const handleAddExpense = (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log('submitting data:', data)
+                //wayfinder
+        post(expensetracker.store.url(), {
+            onSuccess: () => setIsAddOpen(false)
+        });
+    }
 
     return (
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
             <div className="bg-white px-6 py-12 shadow-sm sm:rounded-lg sm:px-12">
-                <Form action="/expensetracker" method="POST" className="space-y-6">
+                <form onSubmit={handleAddExpense} className="space-y-6">
                     <div>
                         <label htmlFor="account" className="block text-sm/6 font-medium text-gray-900">
                             Account
                         </label>
                         <div className="mt-2">
-                            <select name="account" id="account">
+                            <select name="account" id="account" value={data.account}
+                                onChange={(e) => setData('account', e.target.value)}>
                                 {acctOptions.map((account) => (
                                     <option key={account} value={account}>{account}</option>
-                                ) )}
+                                ))}
                             </select>
                         </div>
+                        {errors.account && <div className="text-red-500">{errors.account}</div>}
+
                     </div>
 
                     <div>
@@ -33,12 +55,14 @@ const AddExpense: React.FC<AddExpenseProps> = ({ setIsAddOpen }) => {
                             Category
                         </label>
                         <div className="mt-2">
-                            <select name="category" id="category">
+                            <select name="category" id="category" value={data.category}
+                                onChange={(e) => setData('category', e.target.value)}>
                                 {categories.map((category) => (
                                     <option key={category} value={category}> {category}</option>
                                 ))}
                             </select>
                         </div>
+                        {errors.account && <div className="text-red-500">{errors.account}</div>}
 
                         <div>
                             <label htmlFor="amount" className="block text-sm/6 font-medium text-gray-900">
@@ -49,6 +73,8 @@ const AddExpense: React.FC<AddExpenseProps> = ({ setIsAddOpen }) => {
                                     id="amount"
                                     name="amount"
                                     thousandSeparator
+                                    value={data.amount}
+                                    onValueChange={(values) => setData('amount', values.value)}
                                     decimalScale={2}
                                     fixedDecimalScale={true}
                                     allowLeadingZeros={false}
@@ -68,6 +94,8 @@ const AddExpense: React.FC<AddExpenseProps> = ({ setIsAddOpen }) => {
                                     id="notes"
                                     name="notes"
                                     type="string"
+                                    value={data.notes}
+                                    onChange={(e) => setData('notes', e.target.value)}
                                     required
                                     // autoComplete="current-quantity"
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -84,6 +112,8 @@ const AddExpense: React.FC<AddExpenseProps> = ({ setIsAddOpen }) => {
                                     id="order_at"
                                     name="order_at"
                                     type="date"
+                                    value={data.order_at}
+                                    onChange={(e) => setData('order_at', e.target.value)}
                                     required
                                     // autoComplete="current-quantity"
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -101,7 +131,7 @@ const AddExpense: React.FC<AddExpenseProps> = ({ setIsAddOpen }) => {
                             Save
                         </button>
                     </div>
-                </Form>
+                </form>
             </div>
         </div>
     )

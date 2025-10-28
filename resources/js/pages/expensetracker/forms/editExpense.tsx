@@ -1,85 +1,119 @@
-// import { Form } from "@inertiajs/react";
-// import React from "react";
-// // import { User } from "..";
+import { Form, router } from "@inertiajs/react";
+import React, { use, useState } from "react";
+import { NumericFormat } from "react-number-format";
+import { ExpenseTracker } from "..";
 
-// interface EditUserProps {
-//     setIsEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
-//     selectedItem: User | null;
-// }
+interface EditExpenseProps {
+    setIsEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    selectedItem: ExpenseTracker | null;
+}
 
+const EditExpense: React.FC<EditExpenseProps> = ({ setIsEditOpen, selectedItem }) => {
 
+    const [amount,setAmount] = useState(selectedItem?.amount ?? 0);
 
-// const EditUser: React.FC<EditUserProps> = ({ setIsEditOpen, selectedItem }) => {
-//     console.log()
+    const acctOptions = ['cash', 'credit_card', 'loan']
+    const categories = ['food', 'utilities', 'transportation']
 
-//     return (
-//         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
-//             <div className="bg-white px-6 py-12 shadow-sm sm:rounded-lg sm:px-12">
-//                 <Form action={`/users/${selectedItem?.id}`} method="put" className="space-y-6">
+    return (
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
+            <div className="bg-white px-6 py-12 shadow-sm sm:rounded-lg sm:px-12">
+                <Form action={`/expensetracker/${selectedItem?.id}`} method="put" className="space-y-6">
+                    <div>
+                        <label htmlFor="account" className="block text-sm/6 font-medium text-gray-900">
+                            Account
+                        </label>
+                        <div className="mt-2">
+                            <select name="account" id="account" defaultValue={selectedItem?.account} >
+                                {acctOptions.map((account) => (
+                                    <option key={account} value={account}>{account}</option>
+                                ) )}
+                            </select>
 
-//                     <div>
-//                         <label htmlFor="Name" className="block text-sm/6 font-medium text-gray-900">
-//                             Name
-//                         </label>
-//                         <div className="mt-2">
-//                             <input
-//                                 id="name"
-//                                 name="name"
-//                                 type="text"
-//                                 defaultValue={selectedItem?.name}
-//                                 required
-//                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
-//                         </div>
-//                     </div>
+                        </div>
+                    </div>
 
-//                     <div>
-//                         <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
-//                             Email
-//                         </label>
-//                         <div className="mt-2">
-//                             <input
-//                                 id="email"
-//                                 name="email"
-//                                 type="email"
-//                                 defaultValue={selectedItem?.email}
-//                                 // required
-//                                 // autoComplete="current-quantity"
-//                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-//                             />
-//                         </div>
+                    <div>
+                        <label htmlFor="category" className="block text-sm/6 font-medium text-gray-900">
+                            Category
+                        </label>
+                        <div className="mt-2">
+                            <select name="category" id="category" defaultValue={selectedItem?.category}>
+                                {categories.map((category) => (
+                                    <option key={category} value={category}>{category}</option>
+                                ))}
+                            </select>
+                        </div>
 
-//                         <div>
-//                             <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900">
-//                                 Password
-//                             </label>
-//                             <div className="mt-2">
-//                                 <input
-//                                     id="password"
-//                                     name="password"
-//                                     type="password"
-//                                     defaultValue={selectedItem?.password}
-//                                     // required
-//                                     autoComplete="false"
-//                                     // autoComplete="current-quantity"
-//                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-//                                 />
-//                             </div>
-//                         </div>
-//                     </div>
-//                     <div className="mt-6 flex items-center justify-end gap-x-6">
-//                         <button type="button" className="text-sm/6 font-semibold text-gray-900" onClick={() => setIsEditOpen(false)}>
-//                             Cancel
-//                         </button>
-//                         <button
-//                             type="submit"
-//                             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-//                             Save
-//                         </button>
-//                     </div>
-//                 </Form>
-//             </div>
-//         </div>
-//     )
-// }
+                        <div>
+                            <label htmlFor="amount" className="block text-sm/6 font-medium text-gray-900">
+                                Amount
+                            </label>
+                            <div className="mt-2">
+                                <NumericFormat
+                                    id="amount"
+                                    name="amount"
+                                    thousandSeparator
+                                    decimalScale={2}
+                                    fixedDecimalScale={true}
+                                    allowLeadingZeros={false}
+                                    value={amount}
+                                    onValueChange={((values) => setAmount(values.floatValue ?? 0))}
+                                    placeholder="Enter Amount"
+                                    required
+                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                />
+                            </div>
+                        </div>
 
-// export default EditUser;
+                        <div>
+                            <label htmlFor="notes" className="block text-sm/6 font-medium text-gray-900">
+                                Note
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="notes"
+                                    name="notes"
+                                    type="text"
+                                    defaultValue={selectedItem?.notes}
+                                    required
+                                    // autoComplete="current-quantity"
+                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label htmlFor="order_at" className="block text-sm/6 font-medium text-gray-900">
+                                Order Date
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="order_at"
+                                    name="order_at"
+                                    type="date"
+                                    defaultValue={selectedItem?.order_at?.split(' ')[0]}
+                                    required
+                                    // autoComplete="current-quantity"
+                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="mt-6 flex items-center justify-end gap-x-6">
+                        <button type="button" className="text-sm/6 font-semibold text-gray-900" onClick={() => setIsEditOpen(false)}>
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                            Save
+                        </button>
+                    </div>
+                </Form>
+            </div>
+        </div>
+    )
+}
+
+export default EditExpense;

@@ -13,7 +13,7 @@ class ExpenseTrackerController extends Controller
     public function index()
     {
         return Inertia::render('expensetracker/index', [
-            'expenses' => ExpenseTracker::all(),
+            'expenses' => ExpenseTracker::orderBy('id', 'desc')->get(),
         ]);
     }
 
@@ -37,11 +37,9 @@ class ExpenseTrackerController extends Controller
 
         $validated['amount'] = str_replace(',', '', $validated['amount']);
         
-        $validated['user_id'] = Auth::id();
+        // $validated['user_id'] = Auth::id();
         // dd($striped_amount);
-        //convert to float
-        $validated['amount'] = (float) $validated['amount'];
-
+        // $validated['amount'] = (float) $validated['amount'];
 
         ExpenseTracker::create($validated);
 
@@ -51,43 +49,47 @@ class ExpenseTrackerController extends Controller
     }
 
     
-    public function show(ExpenseTracker $expenseTracker)
+    public function show(ExpenseTracker $expensetracker)
     {
         return Inertia::render('expensetracker/show', [
-            'expense' => $expenseTracker
+            'expense' => $expensetracker
         ]);
     }
 
    
-    public function edit(ExpenseTracker $expenseTracker)
+    public function edit(ExpenseTracker $expensetracker)
     {
         return Inertia::render('expensetracker/edit', [
-            'expense' => $expenseTracker
+            'expense' => $expensetracker
         ]);
     }
 
    
-    public function update(Request $request, ExpenseTracker $expenseTracker)
+    public function update(Request $request, ExpenseTracker $expensetracker)
     {
         $validated = $request->validate([
             'account' => 'bail|string',
             'category' => 'bail|string',
-            'amount' => 'bail|numeric',
+            'amount' => 'bail|string',
             'notes'=> 'bail|string',
-            'order_at'  => 'date|after:today'
+            'order_at'  => 'date'
         ]);
 
-        $validated['user_id'] = $request->user()->getKey();
-        $expenseTracker->update($validated);
+        $validated['amount'] = str_replace(',', '', $validated['amount']);
+        // dd($validated);
+
+        // $validated['user_id'] = Auth::id();
+
+        // $validated['user_id'] = $request->user()->getKey();
+        $expensetracker->update($validated);
         return to_route('expensetracker.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ExpenseTracker $expenseTracker)
+
+    //naming the parameter
+    public function destroy(ExpenseTracker $expensetracker)
     {
-        $expenseTracker->delete();
+        $expensetracker->delete();
         return to_route('expensetracker.index');
     }
 }

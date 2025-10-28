@@ -142,7 +142,7 @@ export default function UsersPage({ users }: Props) {
                                                 </button>
 
                                                 <button onClick={() => handleDeleteUser(user)}  className="text-red-600 hover:text-red-900">
-                                                    Delete <span className="sr-only">, {user.id}</span>
+                                                    Delete 
                                                 </button>
                                             </td>
                                         </tr>

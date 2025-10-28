@@ -124,7 +124,7 @@ export default function InventoriesPage({inventories}: Props) {
                                 Edit
                             </button>
 
-                      <Link href={`/food/${inventory}`} method='delete' className="text-red-600 hover:text-red-900">
+                      <Link href={`/inventories/${inventory.id}`} method='delete' className="text-red-600 hover:text-red-900">
                         Delete <span className="sr-only">, {inventory.id}</span>
                       </Link>
                     </td>
