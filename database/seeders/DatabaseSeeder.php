@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Account;
 use App\Models\ExpenseTracker;
 use App\Models\Inventory;
 use App\Models\User;
@@ -15,6 +16,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        Account::create(['accountname' => 'cash']);
+        Account::create(['accountname' => 'credit_card']);
+        Account::create(['accountname' => 'loan']);
+        Account::create(['accountname' => 'gcash']);
+        // Account::factory(count: 10)->create();
         Inventory::factory(10)->create();
         // User::factory(10)->create();
         ExpenseTracker::factory(10)->create();
@@ -27,5 +33,8 @@ class DatabaseSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
+
+
+
     }
 }

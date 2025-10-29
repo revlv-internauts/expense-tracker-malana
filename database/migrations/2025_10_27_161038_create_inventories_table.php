@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('inventories', function (Blueprint $table) {
             $table->id(); // Primary key
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Link to users
+            // $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Link to users
             $table->string('item_name'); 
             $table->string('serial_code'); 
             $table->string('item_code'); 

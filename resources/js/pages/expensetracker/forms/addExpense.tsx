@@ -18,13 +18,18 @@ const AddExpense: React.FC<AddExpenseProps> = ({ setIsAddOpen }) => {
         order_at: ""
     });
 
-    const acctOptions = ['cash', 'credit_card', 'loan']
+    const acctOptions = [
+        {id: 1, acctname: 'cash'},
+        {id: 2, acctname: 'credit_card'},
+        {id: 3, acctname: 'loan'},
+        {id: 4, acctname: 'gcash'},
+    ]
     const categories = ['food', 'utilities', 'transportation']
 
     const handleAddExpense = (e: React.FormEvent) => {
         e.preventDefault();
         console.log('submitting data:', data)
-                //wayfinder
+            //wayfinder
         post(expensetracker.store.url(), {
             onSuccess: () => setIsAddOpen(false)
         });
@@ -42,12 +47,11 @@ const AddExpense: React.FC<AddExpenseProps> = ({ setIsAddOpen }) => {
                             <select name="account" id="account" value={data.account}
                                 onChange={(e) => setData('account', e.target.value)}>
                                 {acctOptions.map((account) => (
-                                    <option key={account} value={account}>{account}</option>
+                                    <option key={account.id} value={account.id}>{account.acctname}</option>
                                 ))}
                             </select>
                         </div>
                         {errors.account && <div className="text-red-500">{errors.account}</div>}
-
                     </div>
 
                     <div>
@@ -79,11 +83,12 @@ const AddExpense: React.FC<AddExpenseProps> = ({ setIsAddOpen }) => {
                                     fixedDecimalScale={true}
                                     allowLeadingZeros={false}
                                     placeholder="Enter Amount"
-                                    required
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 />
                             </div>
                         </div>
+                        {errors.amount && <div className="text-red-500">{errors.amount}</div>}
+
 
                         <div>
                             <label htmlFor="notes" className="block text-sm/6 font-medium text-gray-900">
@@ -96,11 +101,12 @@ const AddExpense: React.FC<AddExpenseProps> = ({ setIsAddOpen }) => {
                                     type="string"
                                     value={data.notes}
                                     onChange={(e) => setData('notes', e.target.value)}
-                                    required
                                     // autoComplete="current-quantity"
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 />
                             </div>
+                            {errors.notes && <div className="text-red-500">{errors.notes}</div>}
+
                         </div>
 
                         <div>
@@ -114,7 +120,6 @@ const AddExpense: React.FC<AddExpenseProps> = ({ setIsAddOpen }) => {
                                     type="date"
                                     value={data.order_at}
                                     onChange={(e) => setData('order_at', e.target.value)}
-                                    required
                                     // autoComplete="current-quantity"
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 />

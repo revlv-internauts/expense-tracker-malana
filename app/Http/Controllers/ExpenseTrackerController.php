@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use App\Models\ExpenseTracker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,10 +11,16 @@ use Inertia\Inertia;
 class ExpenseTrackerController extends Controller
 {
     
-    public function index()
+    public function index(Request $request)
     {
+        $user = Auth::user(); // authenticating user
+
+        $query = ExpenseTracker::where('user_id' , $user->id)
+        ->with('account'); // this only shows the data that has relation with u.
+
+        $expense = $query->orderBy('id', 'desc')->get();
         return Inertia::render('expensetracker/index', [
-            'expenses' => ExpenseTracker::orderBy('id', 'desc')->get(),
+            'expenses' => $expense,
         ]);
     }
 
@@ -26,8 +33,10 @@ class ExpenseTrackerController extends Controller
     {
         // dd(Auth::check() ::user(), Auth::id());
 
+
+        $account = Account::where('accountname', $request->account)->firstOrFail();
+
         $validated = $request->validate([
-            'account' => 'bail|string|required',
             'category' => 'bail|string|required',
             'amount' => 'bail|string|required',
             'notes'=> 'bail|string|required',
@@ -36,16 +45,15 @@ class ExpenseTrackerController extends Controller
 
 
         $validated['amount'] = str_replace(',', '', $validated['amount']);
-        
-        // $validated['user_id'] = Auth::id();
-        // dd($striped_amount);
-        // $validated['amount'] = (float) $validated['amount'];
 
-        ExpenseTracker::create($validated);
-
+        ExpenseTracker::create(
+            [
+                'user_id' => Auth::id(), 
+                'account_id' => $account->id,
+                ...$validated
+            ]);
 
         return to_route('expensetracker.index');
-        
     }
 
     
@@ -75,6 +83,7 @@ class ExpenseTrackerController extends Controller
             'order_at'  => 'date'
         ]);
 
+        // replacing the comma when submitting
         $validated['amount'] = str_replace(',', '', $validated['amount']);
         // dd($validated);
 

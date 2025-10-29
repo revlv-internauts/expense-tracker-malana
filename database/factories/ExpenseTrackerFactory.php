@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Account;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,17 +18,17 @@ class ExpenseTrackerFactory extends Factory
      */
     public function definition(): array
     {
-        $accounts = ['cash', 'credit_card', 'loan', 'gcash'];
         $categories = ['food', 'utilities', 'transportation'];
 
-
         return [
-            'account' => fake()->randomElement($accounts),
+
+            'user_id' => User::factory(),
+            'account_id' => Account::inRandomOrder()->first()->id, // pick a random account
             'category' => fake()->randomElement($categories),
             'amount' => fake()->numberBetween(1000, 3000),
             'notes'=> fake()->word(),
             'order_at' => fake()->dateTimeThisMonth('now', 'Asia/Manila'),
-            'user_id' => \App\Models\User::factory(),
+            // 'user_id' => \App\Models\User::factory(),
 
         ];
     }

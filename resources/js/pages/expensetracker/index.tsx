@@ -17,7 +17,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export type ExpenseTracker = {
     id: number,
-    account: string,
+    account_id: string,
     category: string,
     amount: number,
     notes: string
@@ -28,7 +28,8 @@ type Props = {
     expenses: ExpenseTracker[];
 };
 
-const columns: (keyof ExpenseTracker)[] = ['id', 'account', 'category', 'amount', 'notes', 'order_at'];
+
+const columns: (keyof ExpenseTracker)[] = ['id', 'account_id', 'category', 'amount', 'notes', 'order_at'];
 
 function FormatDate(dateString: string) {
     const date = new Date(dateString);
@@ -36,6 +37,15 @@ function FormatDate(dateString: string) {
         month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hourCycle: 'h24'
     })
 }
+
+  const acctOptions = [
+        {id: 1, acctname: 'cash'},
+        {id: 2, acctname: 'credit_card'},
+        {id: 3, acctname: 'loan'},
+        {id: 4, acctname: 'gcash'},
+    ]
+
+
 
 export default function ExpenseTrackerPage({ expenses }: Props) {
 
@@ -59,6 +69,8 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
 
     const totalAmount = expenses.reduce((prev, curr) => prev + Number(curr.amount), 0);
 
+    const accountToWord = [] 
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Inventory" />
@@ -68,7 +80,7 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
                     <div className="sm:flex-auto">
                         <h1 className="text-base font-semibold text-gray-900">{breadcrumbs[0].title}</h1>
                         <p className="mt-2 text-sm text-gray-700">
-                            A list of all the users in your account including their name, title, email and role.
+                            A list of all the expense
                         </p>
                     </div>
                     <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -121,7 +133,7 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
                                         <tr key={expense.id}>
                                             <td>{index + 1}</td>
                                             <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
-                                                {expense.account}
+                                                {expense.account.accountname}
                                             </td>
 
                                             {columns.slice(2).map((col) => (

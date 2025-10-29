@@ -12,10 +12,9 @@ class Inventory extends Model
 
     protected $fillable = [
         'item_name',
-        'user_id',
+        // 'user_id',
         'serial_code',
         'item_code',
         'date_of_purchase',
-        'user_id',
     ];
 }

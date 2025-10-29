@@ -21,7 +21,7 @@ class InventoryFactory extends Factory
             'serial_code' => fake()->unique()->uuid(),
             'item_code' => "SL-". fake()->unique()->numberBetween(1000, 3000),
             'date_of_purchase'=> fake()->date(),
-            'user_id' => \App\Models\User::factory(),
+            // 'user_id' => \App\Models\User::factory(),
         ];
     }
 }
