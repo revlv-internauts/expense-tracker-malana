@@ -1,6 +1,4 @@
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
-import { dashboard } from '@/routes';
 import users from '@/routes/users';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head, Link, router } from '@inertiajs/react';
