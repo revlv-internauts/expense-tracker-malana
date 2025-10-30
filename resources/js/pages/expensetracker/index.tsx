@@ -159,6 +159,10 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
                                 </tbody>
                             </table>
 
+                            {/* ====================
+                            TODO: PAGINATION
+                            ==================== */}
+
                             {/*
                             ====================
                                 Edit Form
