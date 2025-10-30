@@ -6,6 +6,7 @@ import { useState } from 'react';
 import AddUser from './forms/addUser';
 import EditUser from './forms/editUser';
 import { User, Paginated} from '@/types/usertypes';
+import { NumericFormat } from 'react-number-format';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -20,12 +21,12 @@ code
 ============================================== */
 
 type Props = {
-    user: Paginated<User>;
+    users: Paginated<User>;
 };
 
 const columns: (keyof User)[] = ['id', 'name', 'email'];
 
-export default function UsersPage({ user }: Props) {
+export default function UsersPage({ users }: Props) {
 
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
@@ -105,7 +106,7 @@ export default function UsersPage({ user }: Props) {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200">
-                                    {user.data.map((user, index) => (
+                                    {users.data.map((user, index) => (
                                         <tr key={user.id}>
                                             <td>{index + 1}</td>
                                             <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0 capitalize">
@@ -114,7 +115,7 @@ export default function UsersPage({ user }: Props) {
 
                                             {columns.slice(2).map((col) => (
                                                 <td key={col} className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                                                    {user[col]}
+                                                    { user[col] }
                                                 </td>
                                             ))}
                                             <td className="py-4 pr-4 pl-3 space-x-7 text-right text-sm font-medium whitespace-nowrap sm:pr-0">

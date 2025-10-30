@@ -130,7 +130,15 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
                                                     
                                                     {col === "account_id" 
                                                         ? expense.account?.accountname 
-                                                        : col === 'amount' ? `P ${expense[col]}` 
+                                                        : col === 'amount' 
+                                                        ? <NumericFormat 
+                                                            displayType='text'
+                                                            thousandSeparator
+                                                            value={expense.amount}
+                                                            decimalScale={2}
+                                                            fixedDecimalScale={true}
+                                                            prefix='P '
+                                                            /> 
                                                         : col === 'order_at' ? FormatDate(expense[col] as string) 
                                                         : expense[col] as string | number
                                                     }
