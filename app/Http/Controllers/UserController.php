@@ -10,8 +10,9 @@ class UserController extends Controller
 {
     public function index()
     {
+        $users = User::paginate(10); // paginating in backend
         return Inertia::render('users/index', [
-            'users' => User::all(),
+            'users' => $users,
         ]);
     }
 

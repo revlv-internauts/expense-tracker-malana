@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { NumericFormat } from 'react-number-format'
 import AddExpense from './forms/addExpense';
 import EditExpense from './forms/editExpense';
+import { ExpenseTracker } from '@/types/expensetypes';
+import { FormatDate } from '@/lib/utils';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -14,37 +16,11 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-
-export type ExpenseTracker = {
-    id: number,
-    account_id: string,
-    category: string,
-    amount: number,
-    notes: string
-    order_at: string,
-};
-
 type Props = {
     expenses: ExpenseTracker[];
 };
 
-
 const columns: (keyof ExpenseTracker)[] = ['id', 'account_id', 'category', 'amount', 'notes', 'order_at'];
-
-function FormatDate(dateString: string) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-        month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hourCycle: 'h24'
-    })
-}
-
-  const acctOptions = [
-        {id: 1, acctname: 'cash'},
-        {id: 2, acctname: 'credit_card'},
-        {id: 3, acctname: 'loan'},
-        {id: 4, acctname: 'gcash'},
-    ]
-
 
 
 export default function ExpenseTrackerPage({ expenses }: Props) {
@@ -63,13 +39,21 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
     const handleDelete = (expenses: ExpenseTracker) => {
         console.log('handleDelete triggered', expenses);
         if (confirm(`Delete ${expenses.category} with amount of P ${expenses.amount}?`)) {
-            router.delete(`expensetracker/${expenses.id}`)
+            /* =================================================
+                ** Using Wayfinder **
+                - php artisan wayfinde:rgenerate - 
+                this automatically generates directories
+                resources/js/actions/App/HTTP/Controllers and 
+                resources/js/routes/foldernameroutename
+
+                ✔ expensetracker.destroy.url({ id: expenses.id}) 
+                ✖ replaces ('/expensetracker/${expenses.id})
+            ================================================= */
+            router.delete(expensetracker.destroy.url({ id: expenses.id}))
         };
     }
 
     const totalAmount = expenses.reduce((prev, curr) => prev + Number(curr.amount), 0);
-
-    const accountToWord = [] 
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -86,13 +70,15 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
                     <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                         <button
                             onClick={() => setIsAddOpen(true)}
-                            className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        >
+                            className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                             Add Exepense
                         </button>
-                        {/* <div> total: {totalAmount} </div> */}
 
-                        {/* FORM */}
+                        {/* 
+                        ====================
+                            FORM
+                        ====================
+                         */}
                         {isAddOpen && (
                             <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/50 backdrop-blur-sm" onClick={handleCloseAddForm}>
                                 <div className=" bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent" onClick={(e) => e.stopPropagation()}>
@@ -107,12 +93,15 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
                                 </div>
                             </div>
                         )}
-                        {/* END FORM */}
+                        {/*
+                        ====================
+                            END FORM 
+                        ====================
+                        */}
                     </div>
                 </div>
 
                 <div className='pt-7'> Total: <NumericFormat value={totalAmount} allowNegative={false} thousandSeparator decimalScale={2} fixedDecimalScale prefix='P ' /> </div>
-
 
                 <div className="mt-8 flow-root">
                     <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -138,8 +127,14 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
 
                                             {columns.slice(2).map((col) => (
                                                 <td key={col} className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                                                    {/* {food[col]} */}
-                                                    {col === 'amount' ? `P ${expense[col]}` : col === 'order_at' ? FormatDate(expense[col]) : expense[col]}
+                                                    
+                                                    {col === "account_id" 
+                                                        ? expense.account?.accountname 
+                                                        : col === 'amount' ? `P ${expense[col]}` 
+                                                        : col === 'order_at' ? FormatDate(expense[col] as string) 
+                                                        : expense[col] as string | number
+                                                    }
+
                                                 </td>
                                             ))}
                                             <td className="py-4 pr-4 pl-3 space-x-7 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
@@ -156,8 +151,11 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
                                 </tbody>
                             </table>
 
-                            {/* Edit Form */}
-                            {/* selectedItem */}
+                            {/*
+                            ====================
+                                Edit Form
+                            ==================== 
+                            */}
                             {isEditOpen && (
                                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/50 backdrop-blur-sm" onClick={handleCloseEditForm}>
                                     <div className=" bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent" onClick={(e) => e.stopPropagation()}>
@@ -171,7 +169,11 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
                                     </div>
                                 </div>
                             )}
-                            {/* END EDIT FORM */}
+                            {/*
+                            ====================
+                            END EDIT FORM 
+                            ====================
+                            */}
 
                         </div>
                     </div>
