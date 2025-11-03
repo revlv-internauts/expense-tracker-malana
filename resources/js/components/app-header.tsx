@@ -47,17 +47,17 @@ const mainNavItems: NavItem[] = [
     },
      {
         title: 'Inventory',
-        href: inventories.index().url,
+        href: inventories.index(),
         icon: Boxes,
     },
      {
         title: 'Users',
-        href: users.index.url(),
+        href: users.index(),
         icon: User,
     },
      {
         title: 'Expense Tracker',
-        href: expensetracker.index.url(),
+        href: expensetracker.index(),
         icon: User,
     },
 ];

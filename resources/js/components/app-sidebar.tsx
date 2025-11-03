@@ -28,17 +28,17 @@ const mainNavItems: NavItem[] = [
     },
      {
         title: 'Inventory',
-        href: inventory.index.url(),
+        href: inventory.index(),
         icon: Boxes,
     },
      {
         title: 'Users',
-        href: users.index.url(),
+        href: users.index(),
         icon: User,
     },
      {
         title: 'Expense Tracker',
-        href: expensetracker.index.url(),
+        href: expensetracker.index(),
         icon: User,
     },
 ];
