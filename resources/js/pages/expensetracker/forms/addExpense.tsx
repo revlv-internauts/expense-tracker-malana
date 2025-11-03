@@ -8,7 +8,7 @@ interface AddExpenseProps {
     setIsAddOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AddExpense: React.FC<AddExpenseProps> = ({ setIsAddOpen }) => {
+const AddExpense = ({ setIsAddOpen }: AddExpenseProps ) => {
 
     const { data, setData, post, processing, errors } = useForm({
         account: "cash",
@@ -36,8 +36,7 @@ const AddExpense: React.FC<AddExpenseProps> = ({ setIsAddOpen }) => {
     }
 
     return (
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
-            <div className="bg-white px-6 py-12 shadow-sm sm:rounded-lg sm:px-12">
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px] px-6 py-12">
                 <form onSubmit={handleAddExpense} className="space-y-6">
                     <div>
                         <label htmlFor="account" className="block text-sm/6 font-medium text-gray-900">
@@ -138,7 +137,6 @@ const AddExpense: React.FC<AddExpenseProps> = ({ setIsAddOpen }) => {
                     </div>
                 </form>
             </div>
-        </div>
     )
 }
 
