@@ -46,7 +46,7 @@ const AddExpense = ({ setIsAddOpen }: AddExpenseProps ) => {
                             <select name="account" id="account" value={data.account}
                                 onChange={(e) => setData('account', e.target.value)}>
                                 {acctOptions.map((account) => (
-                                    <option key={account.id} value={account.id}>{account.acctname}</option>
+                                    <option key={account.id} value={account.acctname}>{account.acctname}</option>
                                 ))}
                             </select>
                         </div>
@@ -65,7 +65,8 @@ const AddExpense = ({ setIsAddOpen }: AddExpenseProps ) => {
                                 ))}
                             </select>
                         </div>
-                        {errors.account && <div className="text-red-500">{errors.account}</div>}
+                            {errors.category && <div className="text-red-500">{errors.category}</div>}
+                    </div>
 
                         <div>
                             <label htmlFor="amount" className="block text-sm/6 font-medium text-gray-900">
@@ -85,8 +86,8 @@ const AddExpense = ({ setIsAddOpen }: AddExpenseProps ) => {
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 />
                             </div>
+                            {errors.amount && <div className="text-red-500">{errors.amount}</div>}
                         </div>
-                        {errors.amount && <div className="text-red-500">{errors.amount}</div>}
 
 
                         <div>
@@ -105,7 +106,6 @@ const AddExpense = ({ setIsAddOpen }: AddExpenseProps ) => {
                                 />
                             </div>
                             {errors.notes && <div className="text-red-500">{errors.notes}</div>}
-
                         </div>
 
                         <div>
@@ -124,7 +124,6 @@ const AddExpense = ({ setIsAddOpen }: AddExpenseProps ) => {
                                 />
                             </div>
                         </div>
-                    </div>
                     <div className="mt-6 flex items-center justify-end gap-x-6">
                         <button type="button" className="text-sm/6 font-semibold text-gray-900" onClick={() => setIsAddOpen(false)}>
                             Cancel
