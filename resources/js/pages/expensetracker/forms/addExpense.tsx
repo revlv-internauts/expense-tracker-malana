@@ -1,14 +1,17 @@
 import expensetracker from "@/routes/expensetracker";
-import { Form, router, useForm } from "@inertiajs/react";
+import { Account } from "@/types/expensetypes";
+import { Form, router, useForm, usePage } from "@inertiajs/react";
 import { log } from "console";
 import React, { use, useState } from "react";
 import { NumericFormat } from "react-number-format";
 
 interface AddExpenseProps {
     setIsAddOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    acctOptions: Account[];
 }
 
-const AddExpense = ({ setIsAddOpen }: AddExpenseProps ) => {
+const AddExpense = ({ setIsAddOpen, acctOptions }: AddExpenseProps ) => {
+    const {flash} = usePage().props;
 
     const { data, setData, post, processing, errors } = useForm({
         account: "cash",
@@ -18,17 +21,12 @@ const AddExpense = ({ setIsAddOpen }: AddExpenseProps ) => {
         order_at: ""
     });
 
-    const acctOptions = [
-        {id: 1, acctname: 'cash'},
-        {id: 2, acctname: 'credit_card'},
-        {id: 3, acctname: 'loan'},
-        {id: 4, acctname: 'gcash'},
-    ]
+ 
     const categories = ['food', 'utilities', 'transportation']
 
     const handleAddExpense = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('submitting data:', data)
+        // console.log('submitting data:', data)
             //wayfinder
         post(expensetracker.store.url(), {
             onSuccess: () => setIsAddOpen(false)
@@ -36,7 +34,11 @@ const AddExpense = ({ setIsAddOpen }: AddExpenseProps ) => {
     }
 
     return (
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px] px-6 py-12">
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px] px-6">
+               <div className="mb-4">
+                Add Expense
+               </div>
+
                 <form onSubmit={handleAddExpense} className="space-y-6">
                     <div>
                         <label htmlFor="account" className="block text-sm/6 font-medium text-gray-900">
@@ -46,7 +48,7 @@ const AddExpense = ({ setIsAddOpen }: AddExpenseProps ) => {
                             <select name="account" id="account" value={data.account}
                                 onChange={(e) => setData('account', e.target.value)}>
                                 {acctOptions.map((account) => (
-                                    <option key={account.id} value={account.acctname}>{account.acctname}</option>
+                                    <option key={account.id} value={account.accountname}>{account.accountname}</option>
                                 ))}
                             </select>
                         </div>
@@ -116,7 +118,7 @@ const AddExpense = ({ setIsAddOpen }: AddExpenseProps ) => {
                                 <input
                                     id="order_at"
                                     name="order_at"
-                                    type="date"
+                                    type="datetime-local"
                                     value={data.order_at}
                                     onChange={(e) => setData('order_at', e.target.value)}
                                     // autoComplete="current-quantity"

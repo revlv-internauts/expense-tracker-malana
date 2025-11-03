@@ -17,6 +17,7 @@ class ExpenseTracker extends Model
     protected $fillable = [
         "account_id", // this will be automatically created since in our migration we declare a fk or relationship 
         "user_id", //$table->foreignIdFor(User::class);
+        "inventory_id",
         "category",
         "amount",
         "notes" ,
@@ -34,5 +35,9 @@ class ExpenseTracker extends Model
         return $this->belongsTo(Account::class);
     }
 
+    public function inventory() 
+    {
+        return $this->belongsTo(Inventory::class);
+    }
 
 }

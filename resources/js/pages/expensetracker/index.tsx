@@ -8,6 +8,7 @@ import AddExpense from './forms/addExpense';
 import EditExpense from './forms/editExpense';
 import { ExpenseTracker } from '@/types/expensetypes';
 import { FormatDate } from '@/lib/utils';
+import { Account } from '@/types/expensetypes';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -55,6 +56,13 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
 
     const totalAmount = expenses.reduce((prev, curr) => prev + Number(curr.amount), 0);
 
+    const acctOptions: Account[] = [
+        {id: 1, accountname: 'cash'},
+        {id: 2, accountname: 'credit_card'},
+        {id: 3, accountname: 'loan'},
+        {id: 4, accountname: 'gcash'},
+    ]
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Inventory" />
@@ -89,7 +97,7 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
                                         x
                                     </button>
                                     {/* passing of props */}
-                                    <AddExpense setIsAddOpen={setIsAddOpen} />
+                                    <AddExpense setIsAddOpen={setIsAddOpen} acctOptions={acctOptions} />
                                 </div>
                             </div>
                         )}
@@ -177,7 +185,7 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
                                             x
                                         </button>
                                         {/* passing of props */}
-                                        <EditExpense selectedItem={selectedItem} setIsEditOpen={setIsEditOpen} />
+                                        <EditExpense selectedItem={selectedItem} setIsEditOpen={setIsEditOpen} acctOptions={acctOptions}/>
                                     </div>
                                 </div>
                             )}

@@ -1,32 +1,51 @@
-import { Form, router } from "@inertiajs/react";
+import { Form, router, useForm } from "@inertiajs/react";
 import React, { use, useState } from "react";
 import { NumericFormat } from "react-number-format";
-import { ExpenseTracker } from "..";
-
+import { ExpenseTracker } from "@/types/expensetypes";
+import { Account } from "@/types/expensetypes";
+import expensetracker from "@/routes/expensetracker";
 interface EditExpenseProps {
     setIsEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
     selectedItem: ExpenseTracker | null;
+    acctOptions: Account[];
 }
 
-const EditExpense: React.FC<EditExpenseProps> = ({ setIsEditOpen, selectedItem }) => {
+const EditExpense = ({ setIsEditOpen, selectedItem, acctOptions }: EditExpenseProps) => {
 
-    const [amount,setAmount] = useState(selectedItem?.amount ?? 0);
-
-    const acctOptions = ['cash', 'credit_card', 'loan']
+    const {data, setData, put, processing, errors} = useForm({
+            account_id: selectedItem?.account.id || "" ,
+            category: selectedItem?.category || "" ,
+            amount: selectedItem?.amount.toString() || "",
+            notes: selectedItem?.notes || "",
+            order_at: selectedItem?.order_at || "",
+        });
+    
     const categories = ['food', 'utilities', 'transportation']
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!selectedItem?.id) return;
+
+
+        put(expensetracker.update.url({id: selectedItem?.id }), {
+            onSuccess:() => setIsEditOpen(false)
+
+        })
+
+    }
 
     return (
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
             <div className="bg-white px-6 py-12 shadow-sm sm:rounded-lg sm:px-12">
-                <Form action={`/expensetracker/${selectedItem?.id}`} method="put" className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                         <label htmlFor="account" className="block text-sm/6 font-medium text-gray-900">
                             Account
                         </label>
                         <div className="mt-2">
-                            <select name="account" id="account" defaultValue={selectedItem?.account} >
+                            <select name="account_id" id="account" value={data.account_id} onChange={(e) => setData('account_id', e.target.value)} >
                                 {acctOptions.map((account) => (
-                                    <option key={account} value={account}>{account}</option>
+                                    <option key={account.id} value={account.id}>{account.accountname}</option>
                                 ) )}
                             </select>
 
@@ -38,7 +57,7 @@ const EditExpense: React.FC<EditExpenseProps> = ({ setIsEditOpen, selectedItem }
                             Category
                         </label>
                         <div className="mt-2">
-                            <select name="category" id="category" defaultValue={selectedItem?.category}>
+                            <select name="category" id="category" value={data.category} onChange={(e) => setData('category', e.target.value)}>
                                 {categories.map((category) => (
                                     <option key={category} value={category}>{category}</option>
                                 ))}
@@ -57,8 +76,8 @@ const EditExpense: React.FC<EditExpenseProps> = ({ setIsEditOpen, selectedItem }
                                     decimalScale={2}
                                     fixedDecimalScale={true}
                                     allowLeadingZeros={false}
-                                    value={amount}
-                                    onValueChange={((values) => setAmount(values.floatValue ?? 0))}
+                                    value={data.amount}
+                                    onValueChange={((values) => setData('amount', values.value))}
                                     placeholder="Enter Amount"
                                     required
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -75,7 +94,8 @@ const EditExpense: React.FC<EditExpenseProps> = ({ setIsEditOpen, selectedItem }
                                     id="notes"
                                     name="notes"
                                     type="text"
-                                    defaultValue={selectedItem?.notes}
+                                    value={data.notes}
+                                    onChange={(e) => setData('notes', e.target.value)}
                                     required
                                     // autoComplete="current-quantity"
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -91,8 +111,10 @@ const EditExpense: React.FC<EditExpenseProps> = ({ setIsEditOpen, selectedItem }
                                 <input
                                     id="order_at"
                                     name="order_at"
-                                    type="date"
-                                    defaultValue={selectedItem?.order_at?.split(' ')[0]}
+                                    type="datetime-local"
+                                    value={data.order_at}
+                                    onChange={(e) => setData('order_at', e.target.value)}
+                                    // defaultValue={selectedItem?.order_at?.split(' ')[0]}
                                     required
                                     // autoComplete="current-quantity"
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -110,7 +132,7 @@ const EditExpense: React.FC<EditExpenseProps> = ({ setIsEditOpen, selectedItem }
                             Save
                         </button>
                     </div>
-                </Form>
+                </form>
             </div>
         </div>
     )

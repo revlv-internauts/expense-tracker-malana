@@ -16,7 +16,7 @@ class ExpenseTrackerController extends Controller
         $user = Auth::user(); // authenticating user
 
         $query = ExpenseTracker::where('user_id' , $user->id)
-        ->with('account'); // this only shows the data that has relation with u.
+        ->with('account'); // this only shows the data that has relation with
 
         $expense = $query->orderBy('id', 'desc')->get();
         return Inertia::render('expensetracker/index', [
@@ -76,7 +76,7 @@ class ExpenseTrackerController extends Controller
     public function update(Request $request, ExpenseTracker $expensetracker)
     {
         $validated = $request->validate([
-            'account' => 'bail|string',
+            'account_id' => 'bail|exists:accounts,id',
             'category' => 'bail|string',
             'amount' => 'bail|string',
             'notes'=> 'bail|string',
