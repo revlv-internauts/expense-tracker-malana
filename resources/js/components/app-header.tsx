@@ -32,7 +32,7 @@ import { cn, isSameUrl, resolveUrl } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Boxes, Folder, LayoutGrid, Menu, Search, User } from 'lucide-react';
+import { BookOpen, Boxes, Folder, LayoutGrid, Menu, PhilippinePeso, Search, User } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
 import inventories from '@/routes/inventories';
@@ -43,7 +43,6 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
-        icon: LayoutGrid,
     },
      {
         title: 'Inventory',
@@ -58,7 +57,7 @@ const mainNavItems: NavItem[] = [
      {
         title: 'Expense Tracker',
         href: expensetracker.index(),
-        icon: User,
+        icon: PhilippinePeso,
     },
 ];
 

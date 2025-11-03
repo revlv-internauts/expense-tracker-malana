@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,6 +18,7 @@ class InventoryFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_id' => User::factory(), // creates a user
             'item_name' => fake()->name(),
             'serial_code' => fake()->unique()->uuid(),
             'item_code' => "SL-". fake()->unique()->numberBetween(1000, 3000),

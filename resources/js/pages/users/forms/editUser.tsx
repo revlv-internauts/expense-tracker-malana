@@ -1,6 +1,8 @@
-import { Form } from "@inertiajs/react";
+import { Form, useForm } from "@inertiajs/react";
 import React from "react";
-import { User } from "..";
+import { User } from "@/types/usertypes";
+import password from "@/routes/password";
+import users from "@/routes/users";
 
 interface EditUserProps {
     setIsEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -9,13 +11,28 @@ interface EditUserProps {
 
 
 
-const EditUser: React.FC<EditUserProps> = ({ setIsEditOpen, selectedItem }) => {
-    console.log()
+const EditUser = ({ setIsEditOpen, selectedItem }: EditUserProps) => {
 
+    const {data, setData, put, processing, errors} = useForm({
+        name: selectedItem?.name || "",
+        email: selectedItem?.email || "",
+        password: "",
+    })
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!selectedItem?.id) return;
+
+        put(users.update.url({id: selectedItem?.id}), {
+            onSuccess: () => setIsEditOpen(false)
+
+        })
+
+    }
     return (
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
             <div className="bg-white px-6 py-12 shadow-sm sm:rounded-lg sm:px-12">
-                <Form action={`/users/${selectedItem?.id}`} method="put" className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
 
                     <div>
                         <label htmlFor="Name" className="block text-sm/6 font-medium text-gray-900">
@@ -26,7 +43,8 @@ const EditUser: React.FC<EditUserProps> = ({ setIsEditOpen, selectedItem }) => {
                                 id="name"
                                 name="name"
                                 type="text"
-                                defaultValue={selectedItem?.name}
+                                value={data.name}
+                                onChange={(e) => setData('name', e.target.value)}
                                 required
                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                         </div>
@@ -41,6 +59,8 @@ const EditUser: React.FC<EditUserProps> = ({ setIsEditOpen, selectedItem }) => {
                                 id="email"
                                 name="email"
                                 type="email"
+                                // value={data.email}
+                                onChange={(e) => setData('email', e.target.value)}
                                 defaultValue={selectedItem?.email}
                                 // required
                                 // autoComplete="current-quantity"
@@ -57,7 +77,9 @@ const EditUser: React.FC<EditUserProps> = ({ setIsEditOpen, selectedItem }) => {
                                     id="password"
                                     name="password"
                                     type="password"
-                                    defaultValue={selectedItem?.password}
+                                    // value={data.password}
+                                    onChange={(e) => setData('password', e.target.value)}
+                                    // defaultValue={selectedItem?.password}
                                     // required
                                     autoComplete="false"
                                     // autoComplete="current-quantity"
@@ -76,7 +98,7 @@ const EditUser: React.FC<EditUserProps> = ({ setIsEditOpen, selectedItem }) => {
                             Save
                         </button>
                     </div>
-                </Form>
+                </form>
             </div>
         </div>
     )

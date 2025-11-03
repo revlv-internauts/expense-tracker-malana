@@ -6,7 +6,6 @@ import { useState } from 'react';
 import AddUser from './forms/addUser';
 import EditUser from './forms/editUser';
 import { User, Paginated} from '@/types/usertypes';
-import { NumericFormat } from 'react-number-format';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -21,7 +20,8 @@ code
 ============================================== */
 
 type Props = {
-    users: Paginated<User>;
+    // users: Paginated<User>;
+    users: User[];
 };
 
 const columns: (keyof User)[] = ['id', 'name', 'email'];
@@ -42,7 +42,7 @@ export default function UsersPage({ users }: Props) {
     const handleDeleteUser = (user: User) => {
         // href={`/users/${user.id}`}
         if (confirm(`Delete ${user.name}?`)){
-            router.delete(users.destroy.url({id: user.id}))
+            router.delete(`/users/${user.id}`)
         }
     } 
 
@@ -106,7 +106,7 @@ export default function UsersPage({ users }: Props) {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200">
-                                    {users.data.map((user, index) => (
+                                    {users.map((user, index) => (
                                         <tr key={user.id}>
                                             <td>{index + 1}</td>
                                             <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0 capitalize">

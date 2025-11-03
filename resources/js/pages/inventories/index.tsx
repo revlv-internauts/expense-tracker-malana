@@ -5,6 +5,8 @@ import inventories from '@/routes/inventories';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
+import AddInventory from './forms/addInventory';
+import EditInventory from './forms/editInventory';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -83,7 +85,7 @@ export default function InventoriesPage({inventories}: Props) {
                     x 
                   </button>
                   {/* passing of props */}
-                  {/* <InputForm setIsAddOpen={setIsAddOpen}/> */}
+                  <AddInventory setIsAddOpen={setIsAddOpen}/>
                 </div>
               </div>
             )} 
@@ -144,7 +146,7 @@ export default function InventoriesPage({inventories}: Props) {
                             x
                         </button>
                         {/* passing of props */}
-                        {/* <EditForm selectedItem={selectedItem} setIsEditOpen={setIsEditOpen} /> */}
+                        <EditInventory selectedItem={selectedItem} setIsEditOpen={setIsEditOpen} />
                     </div>
                 </div>
             )} 

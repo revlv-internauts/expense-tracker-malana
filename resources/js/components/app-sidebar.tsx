@@ -15,7 +15,7 @@ import inventory from '@/routes/inventories';
 
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Boxes, Folder, LayoutGrid, User } from 'lucide-react';
+import { BookOpen, Boxes, Folder, LayoutGrid, PhilippinePeso, User } from 'lucide-react';
 import AppLogo from './app-logo';
 import users from '@/routes/users';
 import expensetracker from '@/routes/expensetracker';
@@ -39,7 +39,7 @@ const mainNavItems: NavItem[] = [
      {
         title: 'Expense Tracker',
         href: expensetracker.index(),
-        icon: User,
+        icon: PhilippinePeso,
     },
 ];
 

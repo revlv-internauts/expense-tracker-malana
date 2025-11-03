@@ -12,9 +12,18 @@ class Inventory extends Model
 
     protected $fillable = [
         'item_name',
-        // 'user_id',
+        'user_id', 
         'serial_code',
         'item_code',
         'date_of_purchase',
     ];
+
+    // Relationship
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
+    public function expense() {
+        return $this->hasMany(ExpenseTracker::class);
+    }
 }
