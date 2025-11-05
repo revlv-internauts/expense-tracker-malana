@@ -1,7 +1,8 @@
 import { useForm } from "@inertiajs/react";
-import { Inventory } from "..";
+// import { Inventory } from "..";
 import React from "react";
 import inventories from "@/routes/inventories";
+import { Inventory } from "@/types/inventorytypes";
 
 interface EditInventoryProps {
     setIsEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
