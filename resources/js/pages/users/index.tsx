@@ -19,9 +19,10 @@ TYPES are separated for more cleaner and readable
 code
 ============================================== */
 
+
 type Props = {
-    // users: Paginated<User>;
-    users: User[];
+    users: Paginated<User>;
+    // users: User[];
 };
 
 const columns: (keyof User)[] = ['id', 'name', 'email'];
@@ -106,7 +107,7 @@ export default function UsersPage({ users }: Props) {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200">
-                                    {users.map((user, index) => (
+                                    {users.data.map((user, index) => (
                                         <tr key={user.id}>
                                             <td>{index + 1}</td>
                                             <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0 capitalize">
@@ -134,6 +135,34 @@ export default function UsersPage({ users }: Props) {
                             </table>
 
                             {/* Pagination */}
+                            <nav
+                                aria-label="Pagination"
+                                className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
+                            >
+                                <div className="hidden sm:block">
+                                    <p className="text-sm text-gray-700">
+                                        Showing <span className="font-medium">{users.current_page ?? 0}</span> to {' '} <span className="font-medium">{users.last_page ?? 0}</span> of{' '}
+                                        <span className="font-medium">{users.total ?? 0}</span> results
+                                    </p>
+                                </div>
+
+                                <div className="flex flex-1 justify-between sm:justify-end">
+
+                                    {users.links.map((link, index) => (
+                                        <Link 
+                                            key={index}
+                                            href={link.url || '#'}
+                                            dangerouslySetInnerHTML={{__html: link.label}}
+                                            className={`relative inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold 
+                                                ${link.active 
+                                                    ? 'bg-indigo-600 text-white'
+                                                    : 'bg-white text-gray-700 ring-1 ring-gray-300 hover:bg-gray-50'
+                                                }`}>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </nav>
+
                            
 
                             {/* ====================

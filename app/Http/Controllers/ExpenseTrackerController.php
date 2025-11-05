@@ -15,12 +15,13 @@ class ExpenseTrackerController extends Controller
     {
         $user = Auth::user(); // authenticating user
 
-        $query = ExpenseTracker::where('user_id' , $user->id)
-        ->with('account'); // this only shows the data that has relation with
+        $expenseQuery= ExpenseTracker::where('user_id' , $user->id)
+            ->with('account')
+            ->orderBy('id','desc')
+            ->paginate(10); // this only shows the data that has relation with
 
-        $expense = $query->orderBy('id', 'desc')->get();
         return Inertia::render('expensetracker/index', [
-            'expenses' => $expense,
+            'expenses' => $expenseQuery,
         ]);
     }
 

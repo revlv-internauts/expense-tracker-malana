@@ -12,7 +12,7 @@ class UserController extends Controller
     {
         $users = User::paginate(10);
         return Inertia::render('users/index', [
-            'users' => User::all(),
+            'users' => $users,
         ]);
     }
 

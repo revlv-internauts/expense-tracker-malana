@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { NumericFormat } from 'react-number-format'
 import AddExpense from './forms/addExpense';
 import EditExpense from './forms/editExpense';
-import { ExpenseTracker } from '@/types/expensetypes';
+import { ExpenseTracker, Paginated } from '@/types/expensetypes';
 import { FormatDate } from '@/lib/utils';
 import { Account } from '@/types/expensetypes';
 
@@ -18,7 +18,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 type Props = {
-    expenses: ExpenseTracker[];
+    expenses: Paginated<ExpenseTracker>;
 };
 
 const columns: (keyof ExpenseTracker)[] = ['id', 'account_id', 'category', 'amount', 'notes', 'order_at'];
@@ -54,7 +54,7 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
         };
     }
 
-    const totalAmount = expenses.reduce((prev, curr) => prev + Number(curr.amount), 0);
+    // const totalAmount = expenses.reduce((prev, curr) => prev + Number(curr.amount), 0);
 
     const acctOptions: Account[] = [
         {id: 1, accountname: 'cash'},
@@ -109,7 +109,7 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
                     </div>
                 </div>
 
-                <div className='pt-7'> Total: <NumericFormat value={totalAmount} allowNegative={false} thousandSeparator decimalScale={2} fixedDecimalScale prefix='P ' /> </div>
+                {/* <div className='pt-7'> Total: <NumericFormat value={totalAmount} allowNegative={false} thousandSeparator decimalScale={2} fixedDecimalScale prefix='P ' /> </div> */}
 
                 <div className="mt-8 flow-root">
                     <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -126,7 +126,7 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200">
-                                    {expenses.map((expense, index) => (
+                                    {expenses.data.map((expense, index) => (
                                         <tr key={expense.id}>
                                             <td>{index + 1}</td>
                                             <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
@@ -168,8 +168,35 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
                             </table>
 
                             {/* ====================
-                            TODO: PAGINATION
+                            PAGINATION
                             ==================== */}
+                            <nav
+                                aria-label="Pagination"
+                                className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
+                            >
+                                <div className="hidden sm:block">
+                                    <p className="text-sm text-gray-700">
+                                        Showing <span className="font-medium">{expenses.current_page ?? 0}</span> to {' '} <span className="font-medium">{expenses.last_page ?? 0}</span> of{' '}
+                                        <span className="font-medium">{expenses.total ?? 0}</span> results
+                                    </p>
+                                </div>
+
+                                <div className="flex flex-1 justify-between sm:justify-end">
+
+                                    {expenses.links.map((link, index) => (
+                                        <Link 
+                                            key={index}
+                                            href={link.url || '#'}
+                                            dangerouslySetInnerHTML={{__html: link.label}}
+                                            className={`relative inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold 
+                                                ${link.active 
+                                                    ? 'bg-indigo-600 text-white'
+                                                    : 'bg-white text-gray-700 ring-1 ring-gray-300 hover:bg-gray-50'
+                                                }`}>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </nav>
 
                             {/*
                             ====================

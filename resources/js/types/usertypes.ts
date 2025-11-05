@@ -14,11 +14,11 @@ export type PaginateLink = {
 export type Paginated<T> = {
     data: T[],
     links: PaginateLink[];
-    meta: {
-        current_page: number;
-        last_page: number;
-        per_page: number;
-        total: number;
-    }
 
+    current_page: number | null;
+    last_page: number | null;
+    per_page: number | null;
+    from: number;
+    to: number | null;
+    total: number| null;
 }

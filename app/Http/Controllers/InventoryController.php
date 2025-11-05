@@ -16,7 +16,7 @@ class InventoryController extends Controller
 
         $query = Inventory::where("user_id", $user->id);
 
-        $inventory = $query->orderBy('id', 'desc')->get();
+        $inventory = $query->orderBy('id', 'desc')->paginate(20);
         return Inertia::render('inventories/index', [
             'inventories' => $inventory
         ]);

@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         Account::create(['accountname' => 'loan']);
         Account::create(['accountname' => 'gcash']);
         // Account::factory(count: 10)->create();
-        Inventory::factory(10)->create();
+        Inventory::factory(100)->create();
         // User::factory(10)->create();
         ExpenseTracker::factory(10)->create();
 

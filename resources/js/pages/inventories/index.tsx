@@ -7,6 +7,7 @@ import { Form, Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
 import AddInventory from './forms/addInventory';
 import EditInventory from './forms/editInventory';
+import { Inventory, Paginated } from '@/types/inventorytypes';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -15,17 +16,8 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-
-export type Inventory = {
-    id: number,
-    item_name: string,
-    serial_code: string,
-    item_code: string,
-    date_of_purchase: string
-};
-
 type Props = {
-  inventories: Inventory[];
+  inventories: Paginated<Inventory>;
 };
 
 const columns: (keyof Inventory)[] = ['id', 'item_name', 'serial_code', 'item_code', 'date_of_purchase'];
@@ -108,7 +100,7 @@ export default function InventoriesPage({inventories}: Props) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {inventories.map((inventory, index) => (
+                {inventories.data.map((inventory, index) => (
                   <tr key={inventory.id}>
                     <td>{index + 1}</td>
                     <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
@@ -134,6 +126,37 @@ export default function InventoriesPage({inventories}: Props) {
                 ))}
               </tbody>
             </table>
+
+            {/* =========
+              Pagination
+            ========== */}
+                <nav
+                  aria-label="Pagination"
+                  className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
+                >
+                  <div className="hidden sm:block">
+                    <p className="text-sm text-gray-700">
+                      Showing <span className="font-medium">{inventories.current_page ?? 0}</span> to {' '} <span className="font-medium">{inventories.last_page ?? 0}</span> of{' '}
+                      <span className="font-medium">{inventories.total ?? 0}</span> results
+                    </p>
+                  </div>
+
+                  <div className="flex flex-1 justify-between sm:justify-end">
+
+                    {inventories.links.map((link, index) => (
+                      <Link
+                        key={index}
+                        href={link.url || '#'}
+                        dangerouslySetInnerHTML={{ __html: link.label }}
+                        className={`relative inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold 
+                                                ${link.active
+                            ? 'bg-indigo-600 text-white'
+                            : 'bg-white text-gray-700 ring-1 ring-gray-300 hover:bg-gray-50'
+                          }`}>
+                      </Link>
+                    ))}
+                  </div>
+                </nav>
 
             {/* Edit Form */}
             {/* selectedItem */}
