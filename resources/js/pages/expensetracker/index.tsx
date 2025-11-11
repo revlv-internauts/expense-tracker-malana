@@ -54,7 +54,7 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
         };
     }
 
-    // const totalAmount = expenses.reduce((prev, curr) => prev + Number(curr.amount), 0);
+    const totalAmount = expenses.data.reduce((prev, curr) => prev + Number(curr.amount), 0);
 
     const acctOptions: Account[] = [
         {id: 1, accountname: 'cash'},
@@ -109,7 +109,7 @@ export default function ExpenseTrackerPage({ expenses }: Props) {
                     </div>
                 </div>
 
-                {/* <div className='pt-7'> Total: <NumericFormat value={totalAmount} allowNegative={false} thousandSeparator decimalScale={2} fixedDecimalScale prefix='P ' /> </div> */}
+                <div className='pt-7'> Total: <NumericFormat value={totalAmount} allowNegative={false} thousandSeparator decimalScale={2} fixedDecimalScale prefix='P ' /> </div>
 
                 <div className="mt-8 flow-root">
                     <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

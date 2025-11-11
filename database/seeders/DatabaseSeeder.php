@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Account;
 use App\Models\ExpenseTracker;
+use App\Models\Gallery;
 use App\Models\Inventory;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -24,6 +25,7 @@ class DatabaseSeeder extends Seeder
         Inventory::factory(100)->create();
         // User::factory(10)->create();
         ExpenseTracker::factory(10)->create();
+        Gallery::factory(10)->create();
 
         User::firstOrCreate(
             ['email' => 'test@example.com'],
@@ -33,8 +35,5 @@ class DatabaseSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
-
-
-
     }
 }

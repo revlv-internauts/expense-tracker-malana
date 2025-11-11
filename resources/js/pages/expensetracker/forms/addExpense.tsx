@@ -11,7 +11,6 @@ interface AddExpenseProps {
 }
 
 const AddExpense = ({ setIsAddOpen, acctOptions }: AddExpenseProps ) => {
-    const {flash} = usePage().props;
 
     const { data, setData, post, processing, errors } = useForm({
         account: "cash",

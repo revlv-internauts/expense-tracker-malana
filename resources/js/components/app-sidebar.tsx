@@ -15,10 +15,11 @@ import inventory from '@/routes/inventories';
 
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Boxes, Folder, LayoutGrid, PhilippinePeso, User } from 'lucide-react';
+import { BookOpen, Boxes, Folder, GalleryThumbnails, Image, LayoutGrid, PhilippinePeso, User } from 'lucide-react';
 import AppLogo from './app-logo';
 import users from '@/routes/users';
 import expensetracker from '@/routes/expensetracker';
+import gallery from '@/routes/gallery';
 
 const mainNavItems: NavItem[] = [
     {
@@ -40,6 +41,11 @@ const mainNavItems: NavItem[] = [
         title: 'Expense Tracker',
         href: expensetracker.index(),
         icon: PhilippinePeso,
+    },
+    {
+        title: 'Gallery',
+        href: gallery.index(),
+        icon: Image,
     },
 ];
 
